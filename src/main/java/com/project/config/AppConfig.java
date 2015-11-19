@@ -13,6 +13,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.orm.hibernate4.HibernateTemplate;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import javax.annotation.PostConstruct;
@@ -23,53 +24,38 @@ import java.util.List;
 
 @Import(HibernateConfig.class)
 @Configuration
-@ComponentScan({"com.project.model","com.project.controller"})
+@ComponentScan({"com.project.controller"})
+@EnableTransactionManagement
 public class AppConfig {
-
-    @Autowired
-    HibernateTemplate hibernateTemplate;
 
     @Autowired
     ServletContext servletContext;
 
+    @Autowired
+    ProductPersistenceService productPersistenceService;
+
     List<Job> jobs;
 
-    AppConfig(){
-
-    }
-
     @PostConstruct
-    void init() throws Exception{
+    void init() throws Exception {
         String path = servletContext.getRealPath("/WEB-INF/site1.xml");
         Job job1 = new Job(path);
         jobs = new LinkedList<Job>();
         jobs.add(job1);
+        runAgent();
     }
 
-    @Bean
-    ProductPersistenceService productPersistenceService(){
-        ProductPersistenceService productPersistenceService = new ProductPersistenceService();
-        hibernateTemplate.setCheckWriteOperations(false);
-        productPersistenceService.setHibernateTemplate(hibernateTemplate);
-        runAgent(productPersistenceService);
-        return productPersistenceService;
-    }
+    private void runAgent(){
 
-    private void runAgent(final ProductPersistenceService productPersistenceService){
         ActorSystem actorSystem = ActorSystem.create("ProductPersistenceAgent");
-
+        final ProductPersistenceService persistenceService = this.productPersistenceService;
         UntypedActorFactory untypedActorFactory = new UntypedActorFactory(){
-
             public UntypedActor create(){
-                return new Master(4,jobs,productPersistenceService);
+                return new Master(4,jobs,persistenceService);
             }
         };
-
         ActorRef master = actorSystem.actorOf(new Props(untypedActorFactory),"master");
-
         master.tell(new Proceed());
 
     }
-
-
 }

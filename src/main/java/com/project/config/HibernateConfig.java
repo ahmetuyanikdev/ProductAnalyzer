@@ -1,5 +1,6 @@
 package com.project.config;
 
+import com.project.service.ProductPersistenceService;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +13,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
+import javax.transaction.Transactional;
 import java.util.Properties;
 
 @Configuration
@@ -47,12 +49,23 @@ public class HibernateConfig {
 
     @Bean
     PlatformTransactionManager txManager() {
-        return new DataSourceTransactionManager(dataSource());
+        DataSourceTransactionManager dataSourceTransactionManager = new DataSourceTransactionManager(dataSource());
+        return  dataSourceTransactionManager;
+
     }
 
     @Bean
     HibernateTemplate hibernateTemplate(SessionFactory sessionFactory){
         return new HibernateTemplate(sessionFactory);
+    }
+
+    @Bean
+    ProductPersistenceService productPersistenceService(HibernateTemplate hibernateTemplate){
+        ProductPersistenceService productPersistenceService = new ProductPersistenceService();
+        hibernateTemplate.setCheckWriteOperations(false);
+        hibernateTemplate.afterPropertiesSet();
+        productPersistenceService.setHibernateTemplate(hibernateTemplate);
+        return productPersistenceService;
     }
 
 
