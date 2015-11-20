@@ -8,29 +8,11 @@
   <name>ProductAnalyzer Maven Webapp</name>
   <url>http://maven.apache.org</url>
 
-  <parent>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-parent</artifactId>
-    <version>1.3.0.RELEASE</version>
-  </parent>
-
   <properties>
     <spring.version>4.2.3.RELEASE</spring.version>
   </properties>
 
   <dependencies>
-
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-legacy</artifactId>
-      <version>1.0.1.RELEASE</version>
-    </dependency>
-
 
     <dependency>
       <groupId>junit</groupId>
@@ -152,19 +134,5 @@
 
   <build>
     <finalName>ProductAnalyzer</finalName>
-    <plugins>
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-        <version>1.3.0.RELEASE</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>repackage</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
   </build>
 </project>

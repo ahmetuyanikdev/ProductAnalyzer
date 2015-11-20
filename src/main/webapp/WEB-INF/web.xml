@@ -29,11 +29,6 @@
         <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
     </listener>
 
-    <listener>
-        <listener-class>org.springframework.boot.legacy.context.web.SpringBootContextLoaderListener</listener-class>
-    </listener>
-
-<!--
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
@@ -43,27 +38,10 @@
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>/faces/*</url-pattern>
-    </servlet-mapping>-->
-
-    <servlet>
-        <servlet-name>appServlet</servlet-name>
-        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-        <init-param>
-            <param-name>contextAttribute</param-name>
-            <param-value>org.springframework.web.context.WebApplicationContext.ROOT</param-value>
-        </init-param>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>appServlet</servlet-name>
-        <url-pattern>/*</url-pattern>
     </servlet-mapping>
 
     <welcome-file-list>
         <welcome-file>faces/ProductSearch.xhtml</welcome-file>
     </welcome-file-list>
-
-
 
 </web-app>
