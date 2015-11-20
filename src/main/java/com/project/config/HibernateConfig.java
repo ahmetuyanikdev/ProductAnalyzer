@@ -1,31 +1,30 @@
 package com.project.config;
 
+import com.project.AppVariables;
 import com.project.service.ProductPersistenceService;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.orm.hibernate4.HibernateTemplate;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
-import javax.transaction.Transactional;
 import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
 public class HibernateConfig {
+
     @Bean
     DataSource dataSource(){
         BasicDataSource dataSource  = new BasicDataSource();
-        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://192.168.99.100:32768/test_db");
-        dataSource.setUsername("root");
-        dataSource.setPassword("nesilrds123");
+        dataSource.setDriverClassName(AppVariables.Driver_Class);
+        dataSource.setUrl(AppVariables.DB_ConnectionUrl);
+        dataSource.setUsername(AppVariables.DB_UserName);
+        dataSource.setPassword(AppVariables.DB_Password);
         return dataSource;
     }
 
@@ -49,9 +48,7 @@ public class HibernateConfig {
 
     @Bean
     PlatformTransactionManager txManager() {
-        DataSourceTransactionManager dataSourceTransactionManager = new DataSourceTransactionManager(dataSource());
-        return  dataSourceTransactionManager;
-
+        return new DataSourceTransactionManager(dataSource());
     }
 
     @Bean

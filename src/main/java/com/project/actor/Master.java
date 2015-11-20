@@ -1,4 +1,4 @@
-package com.project.agent;
+package com.project.actor;
 
 import akka.actor.ActorRef;
 import akka.actor.Props;
@@ -32,7 +32,7 @@ public class Master extends UntypedActor {
             }
         }
 
-        if(message instanceof Job){
+        else if(message instanceof Job){
             Job job = (Job)message;
             productPersistenceService.saveProducts(job.getProducts());
         }

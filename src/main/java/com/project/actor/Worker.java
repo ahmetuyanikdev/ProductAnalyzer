@@ -1,4 +1,4 @@
-package com.project.agent;
+package com.project.actor;
 
 import akka.actor.UntypedActor;
 import com.project.message.Job;
@@ -16,14 +16,12 @@ import java.util.List;
 
 public class Worker extends UntypedActor {
 
-
     @Override
     public void onReceive(Object message) throws Exception {
 
         if(message instanceof Job){
             Job job = (Job) message;
-            job.setProducts(xmlRowHandler(job.getFilePath()));
-            System.out.println("--- product list inited >> "+job.getProducts().size());
+            job.setProducts(parseXmlToProductList(job.getFilePath()));
             getSender().tell(job,getSelf());
         }
         else{
@@ -31,7 +29,7 @@ public class Worker extends UntypedActor {
         }
     }
 
-    public List<Product>  xmlRowHandler(String filePath) throws Exception{
+    private List<Product> parseXmlToProductList(String filePath) throws Exception{
 
         File fXmlFile = new File(filePath);
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -41,8 +39,6 @@ public class Worker extends UntypedActor {
         doc.getDocumentElement().normalize();
 
         NodeList nList = doc.getElementsByTagName("row");
-
-        System.out.println("---------------------------- " +nList.getLength());
 
         List<Product> products = new LinkedList<Product>();
 
@@ -54,7 +50,6 @@ public class Worker extends UntypedActor {
 
                 Element eElement = (Element) nNode;
                 Product product = new Product();
-                /*product.setId(Integer.valueOf(eElement.getElementsByTagName("id").item(0).getTextContent()));*/
                 product.setPrices(eElement.getElementsByTagName("prices").item(0).getTextContent());
                 product.setDates(eElement.getElementsByTagName("dates").item(0).getTextContent());
                 product.setTitle(eElement.getElementsByTagName("title").item(0).getTextContent());

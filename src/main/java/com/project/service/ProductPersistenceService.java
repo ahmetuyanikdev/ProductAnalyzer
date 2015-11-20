@@ -24,7 +24,7 @@ public class ProductPersistenceService {
      public synchronized void  saveProducts(List<Product> products){
 
         for (int i = 0; i <products.size() ; i++) {
-            hibernateTemplate.save(products.get(i));
+            //hibernateTemplate.save(products.get(i));
         }
     }
 
