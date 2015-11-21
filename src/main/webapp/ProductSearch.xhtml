@@ -7,18 +7,42 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 
-<!--<f:view>
-    <h:outputLabel value="Hello, world Product Search"/>
-</f:view>-->
-
 <h:head>
     <title>Product Analyzer</title>
+    <link type="text/css" rel="stylesheet" href="css/basestyle.css"></link>
 </h:head>
 
 <h:body>
-    <f:view>
-       <p:outputLabel value="Hello World,Name"></p:outputLabel>
-    </f:view>
+    <h:form id="form">
+        <h1>Ürün Ismine gore Arama</h1>
+        <br/>
+        <br/>
+        <p:panelGrid columns="4" id="searchPanel">
+             <p:outputLabel value="Ürün adı:"></p:outputLabel>
+             <p:inputText placeholder="title" value="#{productSearchController.productName}"></p:inputText>
+             <p:commandButton action="#{productSearchController.queryProducts}" value="Ara" update="productsTable"></p:commandButton>
+        </p:panelGrid>
+        <p:dataTable id="productsTable" value="#{productSearchController.products}" var="prd">
+            <p:column headerText="Title">
+                <p:outputLabel value="#{prd.title}"></p:outputLabel>
+            </p:column>
+            <p:column headerText="Brand">
+                <p:outputLabel value="#{prd.brand}"></p:outputLabel>
+            </p:column>
+            <p:column headerText="Category">
+                <p:outputLabel value="#{prd.category}"></p:outputLabel>
+            </p:column>
+            <p:column headerText="Fiyat Grafigi">
+                <p:commandButton value="fiyatlar" action="#{productSearchController.setProductPriceChart}" oncomplete="PF('productDialog').show();" update=":form:productDialog" ajax="true">
+                    <f:setPropertyActionListener  value="#{prd}" target="#{productSearchController.selectedProduct}"></f:setPropertyActionListener>
+                </p:commandButton>
+            </p:column>
+        </p:dataTable>
+
+        <p:dialog id="productDialog" widgetVar="productDialog" modal="true">
+            <p:chart type="bar" model="#{productSearchController.barModel}" rendered="#{productSearchController.barModel!=null}" style="height:600px;width: 1000px"/>
+        </p:dialog>
+    </h:form>
 </h:body>
 
 </html>

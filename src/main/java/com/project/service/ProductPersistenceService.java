@@ -15,17 +15,22 @@ import java.util.List;
 @Repository
 @Transactional
 public class ProductPersistenceService {
-    private HibernateTemplate hibernateTemplate;
 
-    public void setHibernateTemplate(HibernateTemplate hibernateTemplate) {
+     private HibernateTemplate hibernateTemplate;
+
+     public void setHibernateTemplate(HibernateTemplate hibernateTemplate) {
         this.hibernateTemplate = hibernateTemplate;
-    }
+     }
 
      public synchronized void  saveProducts(List<Product> products){
-
         for (int i = 0; i <products.size() ; i++) {
             //hibernateTemplate.save(products.get(i));
         }
-    }
+     }
+
+     public List queryProductsByTitle(String titlePattern){
+         String query = "from Product where title like ?";
+         return hibernateTemplate.find(query, titlePattern + "%");
+     }
 
 }
